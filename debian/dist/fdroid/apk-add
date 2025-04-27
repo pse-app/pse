@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -e -o pipefail
+
+if [[ "${#}" != 1 ]]; then
+  echo "Usage: ${0} <apk>"
+  exit 1
+fi
+
+APK_NAME="$(aapt dump --values badging "${1}" | head -n1 | perl -ne "print\$1 if/name='([^']+)'/")"
+APK_VERSION="$(aapt dump --values badging "${1}" | head -n1 | perl -ne "print\$1 if/versionCode='([^']+)'/")"
+
+if [[ "${APK_NAME}" == "" || "${APK_VERSION}" == "" ]]; then
+  echo "Could not detect APK metadata. Invalid APK file?"
+  exit 1
+fi
+
+install -o "root" -g "root" -m "0644" -- "${1}" "/var/lib/pse-server/fdroid/repo/${APK_NAME}_${APK_VERSION}.apk"

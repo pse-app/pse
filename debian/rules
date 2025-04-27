@@ -1,0 +1,26 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+override_dh_auto_clean:
+	rm -rf .kotlin captures build common/build client/build server/build integration/build
+
+override_dh_auto_build:
+	JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64" GRADLE_USER_HOME="$$(pwd)/.gradle_user_home" ANDROID_SDK_HOME="$$(pwd)/.android_sdk_home" GRADLE_OPTS="-Dorg.gradle.daemon=false" ./gradlew :server:distTar
+	rm -rf "$$(pwd)/.gradle_user_home" "$$(pwd)/.android_sdk_home"
+
+override_dh_auto_install:
+	install -d "$$(pwd)/debian/pse-server/usr/share/pse-server"
+	tar -xf "$$(pwd)/server/build/distributions/server-$$(dpkg-parsechangelog --show-field Version).tar" --strip-components=1 --exclude="*.bat" -C "$$(pwd)/debian/pse-server/usr/share/pse-server"
+	install -D "$$(pwd)/debian/dist/pse-server" "$$(pwd)/debian/pse-server/usr/bin/pse-server"
+
+override_dh_installsystemd:
+	dh_installsystemd --name=pse-server
+
+override_dh_fixperms:
+	dh_fixperms
+	chmod 0755 "$$(pwd)/debian/pse-server/var/lib/pse-server/fdroid/apk-add"
+
+override_dh_strip:
+	dh_strip --no-automatic-dbgsym

@@ -1,0 +1,32 @@
+.TH man 5 "09 Feb 2025" "1.0" "pse-server.properties man page"
+.SH NAME
+config.properties - The PSE server configuration file.
+.SH SYNOPSIS
+/etc/pse-server/config.properties
+.SH DESCRIPTION
+Controls the main PSE Server configuration.
+.SH OPTIONS
+.TP
+\fBlisten\=
+Specifies the port or unix socket path where the server should bind to.
+Can be of the format <number> to bind on a TCP port or unix[<owner>:<group>:<permissions>]:<socket path> to bind on a unix socket.
+The part in square brackets can be left off in which case the default file creation mode is used.
+.TP
+\fBpublic_uri\=
+Specifies the public URI at which the server is accessible.
+.TP
+\fBpublic_redirect\=
+Specifies a redirect target when accessing invite links or the main page in the browser.
+.TP
+\fBoidc_discovery_uri\=\fR,\fBoidc_client_id\=
+OpenID discovery URI and client id to be used with the OpenID provider.
+.TP
+\fBdatabase_host\=\fR,\fBdatabase_port\=\fR,\fBdatabase_name\=\fR,\fBdatabase_user\=\fR,\fBdatabase_password\=
+Database host, port, name, user and password to connect to a PostgreSQL database.
+.TP
+\fBcurrency\=
+An ISO 4217 currency code for the currency used by the server.
+.SH SEE ALSO
+pse-server(1) 
+.SH AUTHOR
+PSE Team (pse-team@pse-app.com)

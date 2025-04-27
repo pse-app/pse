@@ -1,0 +1,110 @@
+                         === PSE Installation Guide ===
+
+This document provides a brief overview over the typical installation process of
+the Program for Splitting Expenses (PSE). It lists the necessary steps to deploy
+the PSE Server with a database, OpenID login and an associated FDroid repository
+to a machine running Debian 12 (bookworm).
+
+
+                               == Prerequisites ==
+
+In order to deploy a PSE-Server, you'll need the Debian package (deb file) which
+you should have received as part of the PSE distribution. You also need a signed
+Android Application (apk file) as well as the SHA1 hash of its signing key. Both
+should also be part of the PSE distribution.
+
+It is also assumed that you have a machine running Debian 12 (bookworm) with ssh
+access as root, a publicly routed static IP-Address and DNS-Entries that resolve
+to this IP. This guide is going to walk you through creating an OpenID client id
+using Google as identity provider. If you wish to use another identity provider,
+you additionally need an OpenID client id and the discovery URI for the identity
+provider of your choice.
+
+
+                == Obtaining an OpenID client id using Google ==
+
+This section is not relevant unless you plan to use Google as identity provider.
+To obtain an OpenID client id using Google, you must create a new project in the
+Google Cloud Console [0] and then create an OAuth client id credential selecting
+Android as application type. Then you need to set the android package identifier
+to com.pseapp.client and enter the SHA1 hash that is included alongside your PSE
+distribution. Finally, it is required, that you check the box labeled custom URI
+scheme. Once you created your client id, you are set up to follow the next steps
+using https://accounts.google.com/.well-known/openid-configuration as the OpenID
+discovery URI.
+
+
+                   == Installing the Server Software ==
+
+To install the server software you first have to to copy the Debian Package over
+to the server. Once that is done you can install the package using the following
+command:
+
+> sudo apt install ./<path to deb file>
+
+During the installation process, you will be asked if you want to skip automatic
+configuration. Once you answer No to that question, the system is going to ask a
+series of further questions where you can enter your OIDC parameters, the public
+URL under which the server can be contacted and the currency symbol used on this
+server installation. Additionally, the system will inquire, whether to configure
+the database used by the PSE-Server using the local Postgres instance. Approving
+will create a database user and namespace and install permissions appropriately.
+Due to a bug in the androguard package (Debian #1036559), you'll need to install
+androguard from bookworm backpacks which can be accomplished by this command:
+
+> sudo apt install androguard/bookworm-backports
+
+You should now have a running PSE-Server. For it to be publicly reachable, it is
+still necessary to configure the caddy webserver as reverse proxy. The installer
+has placed a suitable caddy configuration in /etc/pse-server/Caddyfile which can
+be imported into the main Caddyfile unter /etc/caddy/Caddyfile using this import
+directive:
+
+> import /etc/pse-server/Caddyfile
+
+After restarting caddy using
+
+> sudo systemctl restart caddy
+
+the PSE-Server is fully set up.
+
+
+                     == Uploading the Android Application ==
+
+Your PSE distribution comes with a prebuilt Android application (apk file) which
+uses https://pse_app.com as domain name of the PSE-Server it connects to. If you
+wish to distribute PSE using a different domain name, it is necessary to compile
+the application youself. In order to do that, you need the Android SDK installed
+on your system. Inside the source code, you received with your PSE distribution,
+you need to create a file named local.properties. This file hold the Android SDK
+location as well as the server address used by the application signing key paths
+used to sign the app. That file is configured like this:
+
+> sdk.dir=<path of the android sdk>
+> sign.key.alias=<key alias of the signing key in the keystore>
+> sign.key.passsword=<password of the ssigning key in the keystore>
+> sign.store.file=<path of the keystore file>
+> sign.store.password=<password of the keystore>
+> pse.server=<PSE server URL>
+
+Please refer to [2] to see, how to create a keystore for application signing. If
+you want to deploy the application on the default URL, this process isn't needed
+and you can just use the prebuilt apk file for the following steps.
+
+The server installer has preconfigured an FDroid repository. The next step is to
+upload the Android Application (apk file) to that repository. As with the server
+package, you'll first need to copy the application over to your server. Then you
+need to enter the directory /var/lib/pse-server/fdroid as the root user and call
+the apk-add script with the apk file you just uploaded as an argument. This will
+place the apk file in the repository. Before publishing the repository, it needs
+to be signed, which is accomplished by the following command:
+
+> fdroid update -c --create-key
+
+After that, the repository can be published using the fdroid deploy command that
+makes it accessible under the public URL you provided to the server installer.
+
+
+[0]: https://console.cloud.google.com/
+[1]: https://developers.google.com/identity/openid-connect/openid-connect
+[2]: https://developer.android.com/studio/publish/app-signing#generate-key

@@ -1,0 +1,35 @@
+Template: pse-server/skip-autoconf
+Type: boolean
+Default: true
+Description: Skip autoconf?
+ Skips automatic configuration.
+
+Template: pse-server/public-uri
+Type: string
+Default: https://example.com/
+Description: Public URI:
+ The public URI under which the the PSE server is publicly accessible.
+
+Template: pse-server/currency
+Type: string
+Default: USD
+Description: Currency:
+ The ISO-4217 code for the currency used by the server.
+
+Template: pse-server/setup-db
+Type: boolean
+Default: false
+Description: Setup the database?
+ If set, the database will be automatically configured on the local PostgreSQL instance.
+
+Template: pse-server/oidc-client
+Type: string
+Default: 
+Description: OIDC client id:
+ The OIDC client id of the PSE server.
+
+Template: pse-server/oidc-discovery
+Type: string
+Default: 
+Description: OIDC discovery URI:
+ The OIDC discovery URI for the OpenID provider used by the PSE server.

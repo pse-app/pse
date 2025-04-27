@@ -1,0 +1,25 @@
+Source: pse
+Maintainer: PSE Team <pse-team@pse-app.com>
+Section: net
+Priority: optional
+Standards-Version: 4.6.2
+Build-Depends:
+ debhelper-compat (= 13),
+ openjdk-17-jdk (>= 17.0.13)
+
+Package: pse-server
+Architecture: any
+Description: Program for Splitting Expenses - Server
+ Contains the server software of the Program for Splitting Expenses
+Pre-Depends:
+ postgresql-15 (>= 15.10),
+ postgresql-client-15 (>= 15.10)
+Depends: ${shlibs:Depends}, ${misc:Depends},
+ bash (>= 5.2.0),
+ openjdk-17-jdk (>= 17.0.13),
+ caddy (>= 2.6.2),
+ fdroidserver (>= 2.2.1),
+ aapt (>= 10.0.0)
+# backports, see #1036559
+Recommends:
+ androguard (>= 3.4.0~a1-14)

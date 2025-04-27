@@ -1,0 +1,210 @@
+[versions]
+agp = "8.7.3"
+assertj-core = "3.27.3"
+coil-network-okhttp = "3.0.4"
+javaJwt = "4.4.0"
+kotlin = "2.1.0"
+coreKtx = "1.13.1"
+junit4 = "4.13.2"
+android-junit = "1.2.1"
+kotlinx-coroutines-test = "1.10.1"
+ktorm = "4.1.1"
+mockk = "1.13.16"
+navigation-compose = "2.8.5"
+postgres-connector = "42.7.5"
+lifecycle-runtime-ktx = "2.8.7"
+activity-compose = "1.9.3"
+compose-bom = "2025.01.01"
+junit-jupiter = "5.11.4"
+data-store = "1.1.2"
+ktor = "3.0.3"
+jetty = "12.0.16"
+kotlin-serialization = "1.8.0"
+appauth = "0.11.1"
+slf4j = "2.0.16"
+log4j = "2.24.3"
+tca = "1.3.0"
+joptsimple = "5.0.4"
+android-runner = "1.6.2"
+android-rules = "1.6.1"
+junit-ktx = "1.2.1"
+room = "2.6.1"
+kover = "0.9.1"
+detekt = "1.23.8"
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+
+[libraries]
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
+assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj-core" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil-network-okhttp" }
+coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil-network-okhttp" }
+java-jwt = { group = "com.auth0", name = "java-jwt", version.ref = "javaJwt" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit-jupiter" }
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher" }
+
+kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization" }
+
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines-test" }
+ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
+ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
+
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
+
+ktor-client-content-negotiation = { group = "io.ktor", module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-mock = { group = "io.ktor", module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
+
+ktor-server-core = { group = "io.ktor", name = "ktor-server-core", version.ref = "ktor" }
+ktor-server-status = { group = "io.ktor", name = "ktor-server-status-pages", version.ref = "ktor" }
+ktor-server-content-negotiation = { group = "io.ktor", module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
+ktor-server-auth = { group = "io.ktor", name = "ktor-server-auth", version.ref = "ktor" }
+ktor-server-auth-jwt = { group = "io.ktor", name = "ktor-server-auth-jwt", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { group = "io.ktor", module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-server-servlet = { group = "io.ktor", module = "io.ktor:ktor-server-servlet-jakarta", version.ref = "ktor" }
+ktor-server-netty = { group = "io.ktor", module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
+jetty-core = { group = "org.eclipse.jetty", name = "jetty-core", version.ref = "jetty"}
+jetty-servlet = { group = "org.eclipse.jetty.ee10", name = "jetty-ee10-servlet", version.ref = "jetty"}
+jetty-unixsocket = { group = "org.eclipse.jetty", name = "jetty-unixdomain-server", version.ref = "jetty"}
+slf4j-api = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
+slf4j-jdk = { group = "org.slf4j", name = "slf4j-jdk14", version.ref = "slf4j" }
+log4j-slf4j = { group = "org.apache.logging.log4j", name = "log4j-slf4j2-impl", version.ref = "log4j" }
+log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.ref = "log4j" }
+log4j-iostreams = { group = "org.apache.logging.log4j", name = "log4j-iostreams", version.ref = "log4j" }
+terminalconsoleappender = { group = "net.minecrell", name = "terminalconsoleappender", version.ref = "tca" }
+joptsimple = { group = "net.sf.jopt-simple", name = "jopt-simple", version.ref = "joptsimple" }
+
+ktor-server-test-host = { group = "io.ktor", module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
+
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk"}
+
+ktorm-core = { group = "org.ktorm", name = "ktorm-core", version.ref = "ktorm" }
+ktorm-postgresql = { group = "org.ktorm", name = "ktorm-support-postgresql", version.ref = "ktorm" }
+postgres-connector = { group = "org.postgresql", name = "postgresql", version.ref = "postgres-connector" }
+
+appauth = { group = "net.openid", name = "appauth", version.ref = "appauth" }
+
+# Android Stuff
+junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "android-junit" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "data-store" }
+androidx-runner = { group = "androidx.test", name = "runner", version.ref = "android-runner" }
+androidx-rules = { group = "androidx.test", name = "rules", version.ref = "android-rules" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junit-ktx" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+
+[bundles]
+android-libs = [
+    "androidx-core-ktx",
+    "androidx-lifecycle-runtime-ktx",
+    "androidx-activity-compose",
+    "androidx-ui",
+    "androidx-ui-graphics",
+    "androidx-ui-tooling-preview",
+    "androidx-material3",
+    "androidx-datastore-preferences",
+    "androidx-navigation-compose",
+    "androidx-material-icons-extended",
+]
+android-room = [
+    "androidx-room-runtime",
+    "androidx-room-ktx"
+]
+android-test = [
+    "androidx-junit",
+    "androidx-ui-test-junit4",
+    "androidx-runner",
+    "androidx-rules",
+    "androidx-junit-ktx",
+    "mockk-android",
+    "kotlin-test",
+]
+android-debug = [
+    "androidx-ui-test-manifest",
+    "androidx-ui-tooling",
+]
+client-test = [
+    "junit4",
+    "kotlinx-coroutines-test",
+    "mockk",
+    "assertj-core",
+    "kotlin-test",
+]
+ktor-client-app = [
+    "ktor-client-core",
+    "ktor-client-cio",
+    "ktor-client-content-negotiation",
+    "ktor-serialization-kotlinx-json",
+    "ktor-client-logging",
+    "slf4j-api",
+    "slf4j-jdk",
+]
+ktor-client-backend = [
+    "ktor-client-core",
+    "ktor-client-cio",
+    "ktor-client-content-negotiation",
+    "ktor-serialization-kotlinx-json",
+]
+client-auth = [
+    "appauth",
+    "java-jwt",
+]
+server-auth = [
+    "java-jwt",
+]
+ktor-server = [
+    "ktor-server-core",
+    "ktor-server-content-negotiation",
+    "ktor-serialization-kotlinx-json",
+    "ktor-server-servlet",
+    "ktor-server-auth",
+    "ktor-server-auth-jwt",
+    "jetty-core",
+    "jetty-servlet",
+    "jetty-unixsocket",
+    "ktor-server-status",
+    "slf4j-api",
+    "log4j-core",
+    "log4j-slf4j",
+    "log4j-iostreams",
+    "terminalconsoleappender",
+]
+ktor-server-test = [
+    "ktor-server-netty",
+    "ktor-server-test-host",
+    "ktor-client-content-negotiation",
+    "ktor-client-mock",
+]
+ktor-client-test = [
+    "ktor-server-core",
+    "ktor-server-test-host",
+    "ktor-server-content-negotiation"
+]
+server-db = [
+    "ktorm-core",
+    "ktorm-postgresql",
+    "postgres-connector",
+]

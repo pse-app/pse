@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns="https://logging.apache.org/xml/ns"
+               xsi:schemaLocation="
+                       https://logging.apache.org/xml/ns
+                       https://logging.apache.org/xml/ns/log4j-config-2.xsd">
+
+    <Appenders>
+        <TerminalConsole name="Console">
+            <PatternLayout pattern="%highlight{[%d{HH:mm:ss} %level] %c: %msg%n%xEx}" disableAnsi="${tca:disableAnsi}"/>
+        </TerminalConsole>
+    </Appenders>
+
+    <Loggers>
+        <Root level="DEBUG">
+            <AppenderRef ref="Console"/>
+        </Root>
+        <Logger name="org.eclipse.jetty" level="INFO"/>
+        <Logger name="org.ktorm.database" level="INFO"/>
+        <Logger name="docker" level="INFO"/>
+    </Loggers>
+</Configuration>

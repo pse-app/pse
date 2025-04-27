@@ -1,0 +1,747 @@
+openapi: 3.1.0
+info:
+  title: API
+  version: v1
+servers:
+  - url: https://pse-app.com
+paths:
+  /v1/login:
+    post:
+      tags: []
+      description: Convert an OpenID Connect ID token into a access and refresh token
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/com.pse_app.LoginRequest'
+        required: true
+      responses:
+        '200':
+          description: access and refresh token retrieved successfully
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/com.pse_app.LoginResponse'
+        '400':
+          description: Invalid ID token
+          headers: {}
+      deprecated: false
+  /v1/settings:
+    get:
+      tags: []
+      description: Retrieve generic information about the server configuration. This includes OpenID information.
+      parameters: []
+      responses:
+        '200':
+          description: Information about the server configuration retrieved successfully.
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/com.pse_app.SettingsResponse'
+      deprecated: false
+  /v1/groups:
+    put:
+      tags: []
+      description: Create a new group
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/com.pse_app.CreateGroupRequest'
+        required: false
+      responses:
+        '201':
+          description: Group created successfully
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/com.pse_app.GroupInfoResponse'
+        '400':
+          description: Invalid group info
+          headers: {}
+        '401':
+          description: User not logged in
+          headers: {}
+      deprecated: false
+  /groups:
+    get:
+      tags: []
+      description: Retrieve the group info of some groups
+      parameters: []
+      requestBody:
+        description: Groups to get the group info of
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+                title: GroupId
+              title: Set<GroupId>
+              uniqueItems: true
+        required: true
+      responses:
+        '200':
+          description: Group infos retrieved successfully
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/com.pse_app.GroupInfoResponse'
+                title: Map<GroupId,GroupInfoResponse>
+        '401':
+          description: User not logged in
+          headers: {}
+        '404':
+          description: Group not found
+          headers: {}
+      deprecated: false
+  /v1/groups/{groupId}/displayName:
+    patch:
+      tags: []
+      description: Change the display name of a group
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          deprecated: false
+          explode: false
+          schema:
+            type: string
+            title: GroupId
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/com.pse_app.ChangeDisplayNameRequest'
+        required: true
+      responses:
+        '200':
+          description: Display name of group changed successfully
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/com.pse_app.GroupInfoResponse'
+        '400':
+          description: Invalid display name
+          headers: {}
+        '401':
+          description: User not logged in
+          headers: {}
+        '404':
+          description: Group not found
+          headers: {}
+      deprecated: false
+  /groups/{groupId}/regenerateInviteLink:
+    post:
+      tags: []
+      description: Regenerate the invite link of a group
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          deprecated: false
+          explode: false
+          schema:
+            type: string
+            title: GroupId
+      responses:
+        '200':
+          description: Group invite link regenerated successfully
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/java.net.URI'
+        '401':
+          description: User not logged in
+          headers: {}
+        '404':
+          description: Group not found
+          headers: {}
+      deprecated: false
+  /v1/groups/{groupId}/kick/{userId}:
+    post:
+      tags: []
+      description: Kick a user from a group
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          deprecated: false
+          explode: false
+          schema:
+            type: string
+            title: GroupId
+        - name: userId
+          in: path
+          required: true
+          deprecated: false
+          explode: false
+          schema:
+            type: string
+            title: UserId
+      responses:
+        '200':
+          description: Kicked user successfully
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/com.pse_app.GroupInfoResponse'
+        '401':
+          description: User attempting to kick not logged in
+          headers: {}
+        '404':
+          description: Group or user not found
+          headers: {}
+        '422':
+          description: Balance of user to be kicked not zero
+          headers: {}
+      deprecated: false
+  /v1/transactions:
+    get:
+      tags: []
+      description: Retrieve all transactions in some groups
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+                title: GroupId
+              title: Set<GroupId>
+              uniqueItems: true
+        required: true
+      responses:
+        '200':
+          description: Transactions retrieved successfully
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    $ref: >-
+                      #/components/schemas/com.pse_app.TransactionResponse
+                  title: List<TransactionResponse>
+                title: Map<GroupId,List<TransactionResponse>>
+        '401':
+          description: User not logged in
+          headers: {}
+        '404':
+          description: Group not found
+          headers: {}
+      deprecated: false
+    put:
+      tags: []
+      description: Post transactions in groups
+      parameters: []
+      requestBody:
+        description: Transactions to post
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/com.pse_app.TransactionRequest'
+              title: Map<GroupId,TransactionRequest>
+        required: true
+      responses:
+        '200':
+          description: Transactions posted successfully
+          headers: {}
+        '400':
+          description: Invalid transaction
+          headers: {}
+        '401':
+          description: User not logged in
+          headers: {}
+        '404':
+          description: Group not found
+          headers: {}
+      deprecated: false
+  /v1/balances:
+    get:
+      tags: []
+      description: Retrieve the balances of users from common groups
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/com.pse_app.BalancesRequest'
+        required: true
+      responses:
+        '200':
+          description: Balances retrieved successfully
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  additionalProperties:
+                    type: string
+                    title: BigDecimal
+                  title: Map<GroupId,BigDecimal>
+                title: >-
+                  Map<UserId,Map<GroupId,BigDecimal>>
+        '401':
+          description: User not logged in
+          headers: {}
+        '404':
+          description: Group or user not found
+          headers: {}
+      deprecated: false
+  /v1/me:
+    get:
+      tags: []
+      description: Retrieve user info
+      parameters: []
+      responses:
+        '200':
+          description: User info retrieved successfully
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/com.pse_app.UserInfoResponse'
+        '401':
+          description: User not logged in
+          headers: {}
+      deprecated: false
+    delete:
+      tags: []
+      description: Deactivate user
+      parameters: []
+      responses:
+        '200':
+          description: User deactivated successfully
+          headers: {}
+        '401':
+          description: User not logged in
+          headers: {}
+      deprecated: false
+  /v1/me/displayName:
+    patch:
+      tags: []
+      description: Change the display name of the user
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/com.pse_app.ChangeDisplayNameRequest'
+        required: true
+      responses:
+        '200':
+          description: User deactivated successfully
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/com.pse_app.UserInfoResponse'
+        '400':
+          description: Invalid display name
+          headers: {}
+        '401':
+          description: User not logged in
+          headers: {}
+      deprecated: false
+  /v1/usersInCommonGroups:
+    get:
+      tags: []
+      description: Retrieve the user info of all users in common groups
+      parameters: []
+      responses:
+        '200':
+          description: User infos retrieved successfully
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/com.pse_app.UserInfoResponse'
+                title: List<UserInfoResponse>
+        '401':
+          description: User not logged in
+          headers: {}
+      deprecated: false
+  /v1/users:
+    get:
+      tags: []
+      description: Retrieve the user info of some users
+      parameters: []
+      requestBody:
+        description: Users to retrieve the user info of
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+                title: UserId
+              title: Set<UserId>
+              uniqueItems: true
+        required: true
+      responses:
+        '200':
+          description: Users infos retrieved successfully
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/com.pse_app.UserInfoResponse'
+                title: Map<UserId,UserInfoResponse>
+        '401':
+          description: User not logged in
+          headers: {}
+        '404':
+          description: User not found
+          headers: {}
+      deprecated: false
+  /v1/join/{inviteToken}:
+    post:
+      tags: []
+      description: Join a group via its invite token
+      parameters:
+        - name: inviteToken
+          in: path
+          required: true
+          deprecated: false
+          explode: false
+          schema:
+            type: string
+            title: GroupId
+      responses:
+        '200':
+          description: Joined group successfully
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/com.pse_app.GroupInfoResponse'
+        '400':
+          description: Invalid invite token
+          headers: {}
+        '401':
+          description: User not logged in
+          headers: {}
+        '410':
+          description: Invite token has been revoked
+          headers: {}
+      deprecated: false
+  /v1/invite/{inviteToken}:
+    get:
+      tags: []
+      description: >-
+        Retrieve a landing page displaying instructions to install the app and
+        then join the group
+      parameters:
+        - name: inviteToken
+          in: path
+          required: true
+          deprecated: false
+          explode: false
+          schema:
+            type: string
+            title: GroupId
+      responses:
+        '200':
+          description: Landing page retrieved successfully
+          headers: {}
+      deprecated: false
+components:
+  schemas:
+    com.pse_app.IdToken:
+      type: object
+      properties:
+        idToken:
+          type: string
+          title: String
+      required:
+        - idToken
+      title: IdToken
+    com.pse_app.RefreshToken:
+      type: object
+      properties:
+        refreshToken:
+          type: string
+          title: String
+      required:
+        - refreshToken
+      title: RefreshToken
+    com.pse_app.LoginRequest:
+      anyOf:
+        - $ref: '#/components/schemas/com.pse_app.IdToken'
+        - $ref: '#/components/schemas/com.pse_app.RefreshToken'
+      title: LoginRequest
+    com.pse_app.LoginResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          title: String
+        refreshToken:
+          type: string
+          title: String
+      required:
+        - accessToken
+        - refreshToken
+      title: LoginResponse
+    com.pse_app.SettingsResponse:
+      type: object
+      properties:
+        clientId:
+          type: string
+          title: String
+        discoveryUri:
+          type: string
+          title: URI
+        currency:
+          type: string
+          title: String
+      required:
+        - authScopes
+        - clientId
+        - discoveryUri
+        - endSessionRedirectUri
+        - redirectUri
+      title: SettingsResponse
+    com.pse_app.CreateGroupRequest:
+      type: object
+      properties:
+        displayName:
+          type: string
+          title: String
+      required:
+        - displayName
+      title: CreateGroupRequest
+    com.pse_app.GroupInfoResponse:
+      type: object
+      properties:
+        displayName:
+          type: string
+          title: String
+        id:
+          type: string
+          title: GroupId
+        inviteUrl:
+          type: string
+          title: URI
+        members:
+          type: array
+          items:
+            type: string
+            title: UserId
+          title: Set<UserId>
+          uniqueItems: true
+      required:
+        - displayName
+        - id
+        - inviteUrl
+        - members
+      title: GroupInfoResponse
+    com.pse_app.ChangeDisplayNameRequest:
+      type: object
+      properties:
+        displayName:
+          type: string
+          title: String
+      required:
+        - displayName
+      title: ChangeDisplayNameRequest
+    java.net.URI:
+      type: object
+      properties: {}
+      title: URI
+    com.pse_app.TransactionRequest:
+      anyOf:
+        - $ref: '#/components/schemas/com.pse_app.ExpenseRequest'
+        - $ref: '#/components/schemas/com.pse_app.PaymentRequest'
+      title: TransactionRequest
+    com.pse_app.ExpenseRequest:
+      type: object
+      properties:
+        balanceChanges:
+          type: object
+          additionalProperties:
+            type: string
+            title: BigDecimal
+          title: Map<UserId,BigDecimal>
+        comment:
+          type:
+            - 'null'
+            - string
+          title: String
+        expenseAmount:
+          type: string
+          title: BigDecimal
+        name:
+          type: string
+          title: String
+      required:
+        - balanceChanges
+        - expenseAmount
+        - name
+      title: ExpenseRequest
+    com.pse_app.PaymentRequest:
+      type: object
+      properties:
+        balanceChanges:
+          type: object
+          additionalProperties:
+            type: string
+            title: BigDecimal
+          title: Map<UserId,BigDecimal>
+        comment:
+          type:
+            - 'null'
+            - string
+          title: String
+        name:
+          type: string
+          title: String
+      required:
+        - balanceChanges
+        - name
+      title: PaymentRequest
+    com.pse_app.TransactionResponse:
+      anyOf:
+        - $ref: '#/components/schemas/com.pse_app.ExpenseResponse'
+        - $ref: '#/components/schemas/com.pse_app.PaymentResponse'
+      title: TransactionResponse
+    com.pse_app.ExpenseResponse:
+      type: object
+      properties:
+        balanceChanges:
+          type: object
+          additionalProperties:
+            type: string
+            title: BigDecimal
+          title: Map<UserId,BigDecimal>
+        comment:
+          type:
+            - 'null'
+            - string
+          title: String
+        expenseAmount:
+          type: string
+          title: BigDecimal
+        group:
+          type: string
+          title: GroupId
+        name:
+          type: string
+          title: String
+        originatingUser:
+          type: string
+          title: UserId
+        timestamp:
+          type: string
+          title: Instant
+      required:
+        - balanceChanges
+        - expenseAmount
+        - group
+        - name
+        - originatingUser
+        - timestamp
+      title: ExpenseResponse
+    com.pse_app.PaymentResponse:
+      type: object
+      properties:
+        balanceChanges:
+          type: object
+          additionalProperties:
+            type: string
+            title: BigDecimal
+          title: Map<UserId,BigDecimal>
+        comment:
+          type:
+            - 'null'
+            - string
+          title: String
+        group:
+          type: string
+          title: GroupId
+        name:
+          type: string
+          title: String
+        originatingUser:
+          type: string
+          title: UserId
+        timestamp:
+          type: string
+          title: Instant
+      required:
+        - balanceChanges
+        - group
+        - name
+        - originatingUser
+        - timestamp
+      title: PaymentResponse
+    com.pse_app.BalancesRequest:
+      type: object
+      properties:
+        groups:
+          type:
+            - 'null'
+            - array
+          items:
+            type: string
+            title: GroupId
+          title: Set<GroupId>
+        users:
+          type:
+            - 'null'
+            - array
+          items:
+            type: string
+            title: UserId
+          title: Set<UserId>
+      title: BalancesRequest
+    com.pse_app.UserInfoResponse:
+      type: object
+      properties:
+        displayName:
+          type: string
+          title: String
+        groups:
+          type: array
+          items:
+            type: string
+            title: GroupId
+          title: Set<GroupId>
+          uniqueItems: true
+        id:
+          type: string
+          title: UserId
+        profilePicture:
+          type:
+            - 'null'
+            - string
+          title: URI
+      required:
+        - displayName
+        - groups
+        - id
+      title: UserInfoResponse
+  examples: {}

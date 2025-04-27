@@ -1,0 +1,8 @@
+sdk_path: /usr/lib/android-sdk
+make_current_version_link: false
+serverwebroot: /srv/pse-server/fdroid
+repo_name: Program for Splitting Expenses
+repo_icon: icon.png
+repo_description: >-
+  This is the F-Droid repository of the Program for Splitting Expenses (PSE)
+  App.

@@ -1,0 +1,25 @@
+.TH man 1 "09 Feb 2025" "1.0" "pse-server man page"
+.SH NAME
+pse-server \- The Program for Splitting Expenses server
+.SH SYNOPSIS
+pse-server [--transient] [--database-init FILE] CONFIG
+.SH DESCRIPTION
+pse-server starts the server software of the program for splitting expenses.
+.SH OPTIONS
+usage: apktool
+.TP
+\fB\-\-help
+shows help.
+.TP
+\fB\-\-version
+shows version information.
+.TP
+\fB\-\-transient
+uses Docker to start a transient database that gets removed on server exit.
+.TP
+\fB\-\-database-init <FILE>
+Runs the provided SQL file against the database before starting the server.
+.SH SEE ALSO
+pse-server.properties(5) 
+.SH AUTHOR
+PSE Team (pse-team@pse-app.com)

@@ -1,0 +1,86 @@
+style:
+  # The maximum line length is relaxed to 132 characters which is the width of a
+  # DEC VT-340 terminal.
+  MaxLineLength:
+    maxLineLength: 132
+    ignoreAnnotated: [ "org.junit.Test" ]
+
+  # Wildcard imports make the code more readable because they shrink the size of
+  # the import section. This is especially beneficial to extension methods as to
+  # not import every extension method separately.
+  WildcardImport:
+    active: false
+
+  MagicNumber:
+    # Composables may need a large amount of different arbitrary numbers with no
+    # clear meaning to ensure a good looking UI
+    ignoreAnnotated:
+      - Preview
+      - Composable
+
+  UnusedPrivateProperty:
+    ignoreAnnotated:
+      - SpecifiedInDesign
+
+  ReturnCount:
+    max: 4
+
+  ThrowsCount:
+    max: 10
+
+  LoopWithTooManyJumpStatements:
+    maxJumpCount: 2
+
+
+config:
+  validation: true
+  warningsAsErrors: false
+
+naming:
+  PackageNaming:
+    packagePattern: '[a-z]+(\.[a-z][A-Za-z0-9_]*)*'
+  FunctionNaming:
+    ignoreAnnotated:
+      - Composable
+
+complexity:
+  # These thresholds have been lowered especially because the interfaces between
+  # the client components exceed the default settings of this check. To keep the
+  # structure and interfaces from the design phase it was necessary to relax
+  TooManyFunctions:
+    thresholdInFiles: 30
+    thresholdInClasses: 30
+    thresholdInInterfaces: 30
+    thresholdInObjects: 30
+    thresholdInEnums: 30
+
+  # The new two checks are relaxed primarily due to test classes containing lots
+  # of test cases that belong together semantically and use common functionality
+  # for mocking. Because test cases are independent of each other and don't call
+  # reference other test cases this was deemed reasonable.
+  LongMethod:
+    threshold: 250
+  LargeClass:
+    threshold: 1000
+
+  # MonetaryOutlinedTextField is a false positive report of a too complex method
+  # because detekt counts inline functions toward the complexity of an enclosing
+  # scope. However, inline functions often times reduce complexity while keeping
+  # all the functionality not only enclosed in the class but directly inside the
+  # method, thereby employing an even stronger secrecy principle than the common
+  # secrecy principle employed on classes alone.
+  CyclomaticComplexMethod:
+    ignoreFunction: [MonetaryOutlinedTextField]
+
+  LongParameterList:
+    # Named default parameters don't necessarily contribute to the complexity of
+    # a method. In a lot of cases it is useful to have quite a few named default
+    # parameters where only a few get set when the function is used.
+    ignoreDefaultParameters: true
+
+    # Composables may need many parameters to fully specify appearance
+    ignoreAnnotated:
+      - Composable
+
+  ComplexCondition:
+    threshold: 5

@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -e
+
+. /usr/share/debconf/confmodule
+
+db_input high pse-server/skip-autoconf || true
+db_go
+
+db_get pse-server/skip-autoconf || true
+if [ "_${RET}" != "_true" ]; then
+  db_input high pse-server/public-uri || true
+  db_input high pse-server/currency || true
+  db_input high pse-server/setup-db || true
+  db_input high pse-server/oidc-client || true
+  db_input high pse-server/oidc-discovery || true
+  db_go
+fi

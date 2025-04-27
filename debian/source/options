@@ -1,0 +1,5 @@
+--tar-ignore .*
+--tar-ignore local.properties
+--tar-ignore local-files
+--tar-ignore run
+--tar-ignore documentation

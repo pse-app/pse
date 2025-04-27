@@ -1,0 +1,9 @@
+debian/dist/config.properties etc/pse-server/
+debian/dist/Caddyfile etc/pse-server/
+debian/dist/setup.sql usr/share/pse-server/dist/
+server/src/main/resources/com/pse_app/server/database/schema.sql usr/share/pse-server/dist/
+server/src/main/resources/com/pse_app/server/database/migration2.sql usr/share/pse-server/dist/
+debian/dist/fdroid/config.yml var/lib/pse-server/fdroid/
+debian/dist/fdroid/apk-add var/lib/pse-server/fdroid/
+debian/dist/fdroid/icon.png var/lib/pse-server/fdroid/
+debian/dist/fdroid/icon.png var/lib/pse-server/fdroid/repo/icons/

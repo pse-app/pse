@@ -1,0 +1,119 @@
+#!/bin/sh
+
+set -e
+
+. /usr/share/debconf/confmodule
+
+#DEBHELPER#
+
+chown root:root "/etc/pse-server/config.properties" || true
+chmod 0600 "/etc/pse-server/config.properties" || true
+chown root:root "/var/lib/pse-server/fdroid" || true
+chmod 0700 "/var/lib/pse-server/fdroid" || true
+
+pse_config_key() {
+  echo "${1}=$(printf "%s" "${2}" | perl -C -pe 'BEGIN{$/=\1}$_=sprintf("\\u%04X",ord)unless ord()<128;s/\n/\\n/')"
+}
+
+pse_setup_database() {
+  echo "Setting up database configuration"
+  PSE_DB_PASSWORD="$(dd if=/dev/urandom bs=30 count=1 status=none | base64)"
+  if su postgres -c 'psql -w -v ON_ERROR_STOP=1 -f /usr/share/pse-server/dist/setup.sql'; then
+    if su postgres -c "psql -w -c \"ALTER USER pse WITH PASSWORD '${PSE_DB_PASSWORD}';\""; then
+      (
+        pse_config_key "database_host" "127.0.0.1" # This may not be localhost
+        pse_config_key "database_port" "5432"
+        pse_config_key "database_name" "pse"
+        pse_config_key "database_user" "pse"
+        pse_config_key "database_password" "${PSE_DB_PASSWORD}"
+      ) >> "/etc/pse-server/config.properties"
+      echo "Database setup complete."
+    else
+      echo "Failed to configure database password."
+    fi
+  else
+    echo "Failed to setup database."
+  fi
+}
+
+pse_setup_caddy_file() {
+  PSE_CADDY_PUBLIC="${1}"
+  if echo "${PSE_CADDY_PUBLIC}" | grep -q '^https://'; then
+    PSE_CADDY_PROTOCOL="https://"
+    PSE_CADDY_HOST="${PSE_CADDY_PUBLIC#"https://"}"
+  elif echo "${PSE_CADDY_PUBLIC}" | grep -q '^http://'; then
+    PSE_CADDY_PROTOCOL="http://"
+    PSE_CADDY_HOST="${PSE_CADDY_PUBLIC#"http://"}"
+  else
+    PSE_CADDY_PROTOCOL="http://"
+    PSE_CADDY_HOST="${PSE_CADDY_PUBLIC#"://"}"
+  fi
+  
+  if echo "${PSE_CADDY_HOST}" | grep -q '/'; then
+    PSE_CADDY_PATH="/${PSE_CADDY_HOST#*"/"}"
+    PSE_CADDY_HOST="${PSE_CADDY_HOST%%"/"*}"
+  else
+    PSE_CADDY_PATH="/"
+    PSE_CADDY_HOST="${PSE_CADDY_HOST%%"/"*}"
+  fi
+  
+  install -d /srv/pse-server/fdroid || true
+  cat > "/etc/pse-server/Caddyfile" <<EOF
+# Caddy configuration file for reverse-proxying PSE Server
+# This file has to be included in /etc/caddy/Caddyfile:
+#   import /etc/pse-server/Caddyfile
+
+${PSE_CADDY_PROTOCOL}${PSE_CADDY_HOST} {
+  handle_path ${PSE_CADDY_PATH%%/}/fdroid/* {
+    file_server {
+      root /srv/pse-server/fdroid/
+    }
+  }
+  handle_path ${PSE_CADDY_PATH%%/}/* {
+    reverse_proxy * unix//run/pse-server/server.sock {
+      header_down -Server
+    }
+  }
+  handle_path /* {
+    error 404
+  }
+}
+EOF
+  echo "repo_url: \"${PSE_CADDY_PUBLIC%%/}/fdroid/repo\"" >> "/var/lib/pse-server/fdroid/config.yml"
+}
+
+case "${1}" in
+  "configure")
+    db_get pse-server/skip-autoconf || true
+    if [ "_${RET}" != "_true" ]; then
+      
+      db_get pse-server/public-uri || true
+      if [ -n "${RET}" ]; then
+        pse_config_key "public_uri" "${RET}" >> "/etc/pse-server/config.properties"
+        pse_setup_caddy_file "${RET}"
+      fi
+      
+      db_get pse-server/oidc-client || true
+      if [ -n "${RET}" ]; then
+        pse_config_key "oidc_client_id" "${RET}" >> "/etc/pse-server/config.properties"
+      fi
+      
+      db_get pse-server/oidc-discovery || true
+      if [ -n "${RET}" ]; then
+        pse_config_key "oidc_discovery_uri" "${RET}" >> "/etc/pse-server/config.properties"
+      fi
+      
+      db_get pse-server/currency || true
+      if [ -n "${RET}" ]; then
+        pse_config_key "currency" "${RET}" >> "/etc/pse-server/config.properties"
+      fi
+      
+      db_get pse-server/setup-db || true
+      if [ "_${RET}" = "_true" ]; then
+        pse_setup_database
+      fi
+      
+      db_set pse-server/skip-autoconf true || true
+    fi
+  ;;
+esac

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns="https://logging.apache.org/xml/ns"
+               xsi:schemaLocation="
+                       https://logging.apache.org/xml/ns
+                       https://logging.apache.org/xml/ns/log4j-config-2.xsd">
+
+    <Appenders>
+        <TerminalConsole name="Console">
+            <PatternLayout>
+                <MarkerPatternSelector defaultPattern="%highlight{[%d{HH:mm:ss} %level] %c{1}: %msg%n%xEx}" disableAnsi="${tca:disableAnsi}">
+                    <PatternMatch key="PSE_TRANSIENT_DB"
+                                  pattern="%highlight{[%d{HH:mm:ss} %level] %c{1}: %msg%n%xEx}{INFO=magenta bold}" />
+                    <PatternMatch key="PSE_INSTRUMENTED_TEST_LOG"
+                                  pattern="%highlight{[%d{HH:mm:ss} %level] %c{1}: %msg%n%xEx}{INFO=magenta bold}" />
+                </MarkerPatternSelector>
+            </PatternLayout>
+        </TerminalConsole>
+        <File name="DebugLog" fileName="build/logs/debug.log" append="false">
+            <PatternLayout pattern="[%d{HH:mm:ss} %level] %c: %msg%n%xEx" disableAnsi="true"/>
+        </File>
+    </Appenders>
+
+    <Loggers>
+        <Root level="TRACE">
+            <AppenderRef ref="Console" level="DEBUG"/>
+            <AppenderRef ref="DebugLog" level="TRACE"/>
+        </Root>
+        <Logger name="org.eclipse.jetty" level="INFO"/>
+        <Logger name="org.ktorm.database" level="INFO"/>
+        <Logger name="io.ktor.server.routing.Routing" level="DEBUG"/>
+        <Logger name="docker" level="INFO"/>
+    </Loggers>
+</Configuration>

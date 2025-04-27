@@ -1,0 +1,20 @@
+[Unit]
+Description=Program for Splitting Expenses - Server
+After=network-online.target remote-fs.target nss-lookup.target postgresql.service
+Wants=network-online.target
+StartLimitIntervalSec=80
+StartLimitBurst=5
+
+[Service]
+ExecStart=/usr/bin/pse-server -- /etc/pse-server/config.properties
+KillMode=mixed
+TimeoutStopSec=10
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=pse
+RuntimeDirectory=pse-server
+
+[Install]
+WantedBy=multi-user.target

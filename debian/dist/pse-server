@@ -1,0 +1,3 @@
+#!/bin/sh
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+exec /usr/share/pse-server/bin/server "$@"

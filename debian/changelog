@@ -1,0 +1,35 @@
+pse (1.5) bookworm; urgency=medium
+
+  * This is the final release of PSE.
+
+ -- PSE Team <pse-team@pse-app.com>  Thu, 27 Mar 2025 16:45:26 +0100
+
+pse (1.4) bookworm; urgency=medium
+
+  * End of the quality assurance period.
+
+ -- PSE Team <pse-team@pse-app.com>  Fri, 14 Mar 2025 22:44:59 +0100
+
+pse (1.3) bookworm; urgency=medium
+
+  * more quality assurance
+
+ -- PSE Team <pse-team@pse-app.com>  Wed, 12 Mar 2025 21:04:11 +0100
+
+pse (1.2) bookworm; urgency=medium
+
+  * quality assurance
+
+ -- PSE Team <pse-team@pse-app.com>  Sun, 09 Mar 2025 23:30:45 +0100
+
+pse (1.1) bookworm; urgency=medium
+
+  * Bugfixes
+
+ -- PSE Team <pse-team@pse-app.com>  Sun, 09 Feb 2025 23:48:46 +0100
+
+pse (1.0) bookworm; urgency=medium
+
+  * Initial release.
+
+ -- PSE Team <pse-team@pse-app.com>  Wed, 29 Jan 2025 22:17:34 +0100
